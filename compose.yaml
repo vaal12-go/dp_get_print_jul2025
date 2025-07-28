@@ -1,0 +1,57 @@
+name: dp_compose_28jul2025
+
+x-common-variables: &common-variables
+  POSTGRES_HOST: postgres_db
+  POSTGRES_PASSWORD: mysecretpassword
+  POSTGRES_USER: mysecretuser
+  POSTGRES_DB_NAME: mysecretuser
+  POSGRES_PORT: 5432
+  
+services:
+  get_data: 
+    image: i_dp_28jul2025
+    build: .
+    command: uv run python -u get_data.py
+    container_name: c_get-dp_28jul2025
+    depends_on: 
+      postgres_db:
+        condition: service_healthy
+    environment: *common-variables
+    networks:
+      - internet
+      - backend
+
+  print_data: 
+    image: i_dp_28jul2025
+    command: uv run python -u print_data.py
+    container_name: c_print-dp_28jul2025
+    depends_on: 
+      postgres_db:
+        condition: service_healthy
+    environment:
+      <<: *common-variables
+      DATA_PRINT_SELECTOR: WIKIPEDIATABLE_CONTINENTAL_2022
+    networks:
+      - backend
+
+  postgres_db:
+    image: postgres:14.18-bookworm@sha256:563a4985838fcb5ac2e60fd58a1055ceafa791665e75e18d236221af0d478a33
+    container_name: c_postgres_dp_28Jul2025
+    environment: *common-variables
+    # hostname: postgres_db_host   #TODO: check if can change hostname on internal network
+    # Exposing ports for debugging
+    # ports:  
+    #   - "127.0.0.1:5432:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U mysecretuser -p 5432"]
+      interval: 3s
+      timeout: 3s
+      retries: 10
+    networks:
+      - backend
+
+networks:
+  internet:
+    driver: bridge
+  backend:
+    internal: true
