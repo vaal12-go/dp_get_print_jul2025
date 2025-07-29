@@ -60,6 +60,7 @@ class BaseFetcher(ABC):
         print(f"[{self.datasource}] fetcher:{msg}")
 
     async def fetch_data_to_db(self) -> None:
+        # TODO: move page fetching here (as it is common for all fetchers, only call generator)
         self.print_message("Starting")
         counter = 0
         with Session(self.db_engine, expire_on_commit=False) as session:

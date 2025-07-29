@@ -21,6 +21,8 @@ COPY ./python-app /python-app
 RUN rm -r /python-app/.venv
 RUN rm -r /python-app/test
 RUN rm /python-app/.env
+# Add - find ./**/*.pyc -delete
+#       find ./**/__pycache__ -delete
 
 CMD [ "/bin/bash" ]
 

@@ -71,13 +71,13 @@ if __name__ == "__main__":
         postgres_user = config["POSTGRES_USER"]
         postgres_pass = config["POSTGRES_PASSWORD"]
         postgres_db_name = config["POSTGRES_DB_NAME"]
+        print_selector = config["DATA_PRINT_SELECTOR"]
     else:
         postgres_port = os.getenv("POSGRES_PORT")
         postgres_user = os.getenv("POSTGRES_USER")
         postgres_pass = os.getenv("POSTGRES_PASSWORD")
         postgres_db_name = os.getenv("POSTGRES_DB_NAME")
-
-    print_selector = os.getenv("DATA_PRINT_SELECTOR")
+        print_selector = os.getenv("DATA_PRINT_SELECTOR")
 
     if print_selector is None:
         print("DATA_PRINT_SELECTOR env variable is not provided. Using default:WIKIPEDIATABLE_STATISTICAL_2022")

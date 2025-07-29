@@ -9,13 +9,18 @@ class DebugOption:
     READ_FROM_FILE: int = 2
 
 
+def parse_wiki_integer(number_str: str) -> int:
+    # TODO: rename to something like 'parse integer with separator (and make separator a parameter)
+    replaced_str = number_str.replace(',', '')
+    return int(replaced_str)
+
+
 async def async_fetch_url(target_url: str,
                           debug_option: DebugOption = DebugOption.NONE,
                           debug_file: str = None) -> bytearray:
     # TODO: make this separate function and remake tests for this.
     file_content = bytearray()
     if debug_option == DebugOption.READ_FROM_FILE:
-        # print('Will read from file:', debug_file)
         async with aiofiles.open(debug_file, 'rb') as f:
             file_content = await f.read()
     else:
