@@ -8,10 +8,7 @@ from models.country import Country
 
 from bs4 import BeautifulSoup
 
-
-def parse_wiki_integer(number_str: str) -> int:
-    replaced_str = number_str.replace(',', '')
-    return int(replaced_str)
+from datafetchers.fetcher_utils import parse_wiki_integer
 
 
 REGION_TYPE_CONTINENTAL = "CONTINENTAL"
@@ -72,6 +69,7 @@ class WikipediaFetcher(BaseFetcher):
         return ret
 
     def wiki_table_country_generator(self, html_page):
+        # TODO: decode html_page as it is a bytearray
         soup = BeautifulSoup(html_page, 'html.parser')
         table = soup.find(
             "div", id='mw-content-text').find('table').find('tbody')
@@ -119,7 +117,9 @@ class WikipediaFetcher(BaseFetcher):
         self.print_message(f"Total rows processed:{i}")
 
     async def get_data(self) -> None:
+        self.print_message("Retrieving data from the web.")
         wiki_html = await async_fetch_url(
             WIKI_COUNTRIES_PAGE_URL,
             debug_option=self.debug_option, debug_file=self.debug_file)
+        self.print_message("Web data retrieved. Starting parsing.")
         return self.wiki_table_country_generator(wiki_html)

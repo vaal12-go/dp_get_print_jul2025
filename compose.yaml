@@ -36,7 +36,7 @@ services:
 
   postgres_db:
     image: postgres:14.18-bookworm@sha256:563a4985838fcb5ac2e60fd58a1055ceafa791665e75e18d236221af0d478a33
-    container_name: c_postgres_dp_28Jul2025
+    # container_name: c_postgres_dp_28Jul2025
     environment: *common-variables
     # hostname: postgres_db_host   #TODO: check if can change hostname on internal network
     # Exposing ports for debugging
